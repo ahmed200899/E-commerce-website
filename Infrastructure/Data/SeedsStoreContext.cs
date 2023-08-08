@@ -59,7 +59,8 @@ namespace Infrastructure.Data
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Hello, world!");         
+                var logger = loggerFactory.CreateLogger(typeof(SeedsStoreContext).FullName);
+                logger.LogError(ex, "An Error reading data from json files");
             }
         }
     }

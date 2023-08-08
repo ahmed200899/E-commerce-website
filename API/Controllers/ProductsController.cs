@@ -9,9 +9,8 @@ using core.Interfaces;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+
+    public class ProductsController : Basecontroller
     {
         private readonly IproductRepository _Repo;
         public ProductsController(IproductRepository Repo)
@@ -20,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts()
+        public async Task<ActionResult<List<Product>>> GetProducts(string orderby,string AscOrDesc,int? Typeid,int? brandid,int pagenumber,string search)
         {
-            var products = await _Repo.GetProductsAsnc();
+            var products = await _Repo.GetProductsAsnc(orderby,AscOrDesc,Typeid,brandid,pagenumber,search);
 
             return Ok(products);
         }
