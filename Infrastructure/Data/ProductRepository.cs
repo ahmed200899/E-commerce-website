@@ -26,7 +26,8 @@ namespace Infrastructure.Data
                                 .Include(p=>p.ProductBrand)
                                 .FirstOrDefaultAsync(p=>p.Id == id);
         }
-        public async Task<IReadOnlyList<Product>> GetProductsAsync(string orderBy, string ascOrDesc, int? typeId, int? brandId, int pageNumber, string search)
+
+        public async Task<IReadOnlyList<Product>> GetProductsAsnc(string orderBy, string ascOrDesc, int? typeId, int? brandId, int pageNumber, string search)
         {
             var products = _context.Products
                 .Include(p => p.ProductType)
@@ -59,8 +60,10 @@ namespace Infrastructure.Data
                     : await products.OrderByDescending(p => p.Price)
                         .Skip(pageNumber * PageSize)
                         .Take(PageSize)
-                        .ToListAsync();
+                        .ToListAsync();        
         }
+
+ 
         public async Task<IReadOnlyList<ProductBrand>> GetProductsBrandsAsnc()
         {
             return await _context.ProductBrands.ToListAsync() ;
