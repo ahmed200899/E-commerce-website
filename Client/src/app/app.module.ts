@@ -4,18 +4,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {HttpClientModule} from '@angular/common/http'
+import { SingeltonModule } from './singelton/singelton.module';
+import { ShopModule } from './shop/shop.module';
 
-/**
- * The AppModule class is a module in an Angular application that imports necessary modules, declares components, and provides services. It also specifies the root component to bootstrap the application.
- */
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    ShopModule,
+    SingeltonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

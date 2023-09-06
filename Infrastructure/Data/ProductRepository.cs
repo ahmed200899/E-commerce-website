@@ -16,7 +16,7 @@ namespace Infrastructure.Data
         public ProductRepository(StoreContext context)
         {
             _context = context;
-            PageSize = 5;
+            PageSize = 15;
 
         }
         public async Task<Product> GetProductByIdAsnc(int id)
@@ -42,25 +42,40 @@ namespace Infrastructure.Data
                     (string.IsNullOrEmpty(search) || p.Name.ToLower().Contains(search))
                 );
             }
+            
 
-            return string.IsNullOrEmpty(orderBy) && string.IsNullOrEmpty(ascOrDesc) && orderBy != "price"
-
-                ? await products.OrderBy(p => p.Name)
-                    .Skip(pageNumber * PageSize)
-                    .Take(PageSize)
-                    .ToListAsync()
-
-                : ascOrDesc.Equals("asc", StringComparison.OrdinalIgnoreCase)
-                
-                    ? await products.OrderBy(p => p.Price)
+            if(orderBy != "name" && orderBy != "price")
+            {
+                return await products.OrderByDescending(p => p.Name)
                         .Skip(pageNumber * PageSize)
                         .Take(PageSize)
-                        .ToListAsync()
+                        .ToListAsync();
+            }
+            else
+            {
+                return orderBy == "name"  
+                    ? ascOrDesc.Equals("asc", StringComparison.OrdinalIgnoreCase) //name
+                        ? await products.OrderBy(p => p.Name)
+                            .Skip(pageNumber * PageSize)
+                            .Take(PageSize)
+                            .ToListAsync()
 
-                    : await products.OrderByDescending(p => p.Price)
-                        .Skip(pageNumber * PageSize)
-                        .Take(PageSize)
-                        .ToListAsync();        
+                        : await products.OrderByDescending(p => p.Name)
+                            .Skip(pageNumber * PageSize)
+                            .Take(PageSize)
+                            .ToListAsync()
+
+                    : ascOrDesc.Equals("asc", StringComparison.OrdinalIgnoreCase) // Price
+                        ? await products.OrderBy(p => p.Price)
+                            .Skip(pageNumber * PageSize)
+                            .Take(PageSize)
+                            .ToListAsync()
+
+                        : await products.OrderByDescending(p => p.Price)
+                            .Skip(pageNumber * PageSize)
+                            .Take(PageSize)
+                            .ToListAsync(); 
+            }       
         }
 
  

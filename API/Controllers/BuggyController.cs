@@ -10,7 +10,6 @@ namespace API.Controllers
         public BuggyController(StoreContext context)
         {
             _context = context;
-
         }
 
         [HttpGet("notfound")]

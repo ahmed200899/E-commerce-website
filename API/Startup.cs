@@ -1,5 +1,6 @@
 using System.Linq;
 using API.Errors;
+using API.Helpers;
 using API.Middleware;
 using core.Interfaces;
 using Infrastructure.Data;
@@ -27,6 +28,7 @@ namespace API
         {
             services.AddLogging();
             services.AddControllers();
+            services.AddAutoMapper(typeof(mapping));
             services.AddDbContext<StoreContext>(x =>
                  x.UseSqlite(_configuration.GetConnectionString("DefaultConnection")));
 
@@ -78,6 +80,7 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
             app.UseCors("CoresPolicy");
 
             app.UseAuthorization();

@@ -6,6 +6,9 @@ using core.Enities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using core.Interfaces;
+using API.Dto;
+using AutoMapper;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -13,23 +16,33 @@ namespace API.Controllers
     public class ProductsController : Basecontroller
     {
         private readonly IproductRepository _Repo;
-        public ProductsController(IproductRepository Repo)
+        private readonly IMapper _mapper;
+        public ProductsController(IproductRepository Repo, IMapper mapper)
         {
+            _mapper = mapper;
             _Repo = Repo;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetProducts(string orderby,string AscOrDesc,int? Typeid,int? brandid,int pagenumber,string search)
+        public async Task<ActionResult<paggination<ProductstoreturnDto>>> GetProducts(string orderby, string AscOrDesc, int? Typeid, int? brandid, int pagenumber, string search)
         {
-            var products = await _Repo.GetProductsAsnc(orderby,AscOrDesc,Typeid,brandid,pagenumber,search);
+            var page_size = 15;
+            var page_Number = pagenumber;
+            var products = await _Repo.GetProductsAsnc(orderby, AscOrDesc, Typeid, brandid, pagenumber, search);
+            var count = products.Count();
+            var Data = _mapper
+                        .Map<IReadOnlyList<Product>,IReadOnlyList<ProductstoreturnDto>>
+                        (products);
+            return Ok(new paggination<ProductstoreturnDto>(page_Number,page_size,count,Data));
 
-            return Ok(products);
-        }
+        } 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductstoreturnDto>> GetProduct(int id)
         {
-            return await _Repo.GetProductByIdAsnc(id);
+            var product = await _Repo.GetProductByIdAsnc(id);
+
+            return _mapper.Map<Product,ProductstoreturnDto>(product);
         }
 
         [HttpGet("Brands")]
@@ -38,7 +51,7 @@ namespace API.Controllers
             return Ok(await _Repo.GetProductsBrandsAsnc());
         }
 
-        [HttpGet("Types")]    
+        [HttpGet("Types")]
         public async Task<ActionResult<IReadOnlyList<ProductType>>> GetProductTypes()
         {
             return Ok(await _Repo.GetProductsTypesAsnc());

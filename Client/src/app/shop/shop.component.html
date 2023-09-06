@@ -1,0 +1,72 @@
+<div class="Container">
+  <div class = "row">
+
+
+    <section class ="col-3">
+
+      <h5 class="text-warning ml-3">Sort</h5>
+      <select class="form-control" (change)="onorderselection($event)">
+        <option *ngFor="let sort of orderbylist"
+          [value] = "sort.name">
+          {{sort.value}}
+        </option>
+      </select>
+
+      <h5 class="text-warning my-3">Brands</h5>
+      <ul class="list-group">
+        <li class="list-group-item "
+         *ngFor="let brand of brands"
+         [class.active] = "brand.id === this.selectedbrandid"
+         [value] = "brand.id"
+         (click) = "onbrandselected(brand.id)"
+         >
+          {{brand.name}}
+        </li>
+      </ul>
+
+      <h5 class="text-warning my-3">Types</h5>
+      <ul class="list-group">
+          <li class="list-group-item "
+           *ngFor="let type of types"
+           [class.active] = "type.id === this.selectedtypeid"
+           [value] = "type.id"
+           (click) = "ontypeselected(type.id)"
+          >
+            {{type.name}}
+          </li>
+      </ul>
+      
+    </section>
+
+
+
+  
+    <section class="col-9">
+      
+      <div class="d-flex justify-content-end align-items-center pb-2">
+        <div class="form-group mt-2">
+          <div class="input-group">
+            <input type="text" class="form-control" style="width: 300px;" placeholder="Search" #searchInput>
+            <div class="input-group-append">
+              <button class="btn btn-outline-primary"(click)="onSearchClick(searchInput.value)">Search</button>
+              <button class="btn btn-outline-success" (click)="onresetClick()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+      
+
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col" *ngFor="let item of products">
+         <app-item [product]="item"></app-item>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+</div>
